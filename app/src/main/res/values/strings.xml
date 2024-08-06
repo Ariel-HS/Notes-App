@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">NotesApp</string>
+    
+    <string-array name="sortOptions">
+        <item>Title (A-Z)</item>
+        <item>Title (Z-A)</item>
+        <item>Created-at (Newest)</item>
+        <item>Created-at (Oldest)</item>
+        <item>Updated-at (Most Recent)</item>
+        <item>Updated-at (Least Recent)</item>
+    </string-array>
+    <string-array name="searchOptions">
+        <item>Title and Note</item>
+        <item>Title</item>
+        <item>Note</item>
+    </string-array>
+    <string-array name="sortAlgorithmOptions">
+        <item>sort 1</item>
+        <item>sort 2</item>
+    </string-array>
+    <string-array name="matchAlgorithmOptions">
+        <item>KMP</item>
+        <item>BM</item>
+    </string-array>
+</resources>
