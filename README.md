@@ -10,7 +10,9 @@ A simple android notes app made using Kotlin. You can create, update, read, and 
 ## Technologies Used
 * Kotlin Programming Language
 * Room Database
-* Android Studio
+* Android Studio / Android SDK
+* KSP API
+* Apache POI and XMLBeans
 
 ## Minimum Requirements
 * Android SDK 24 or above
