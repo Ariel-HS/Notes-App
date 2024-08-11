@@ -242,14 +242,22 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
         excelName = name
         excelType = type
         storageOpt = loc
-        checkAndRequestPermissionRead()
+        if (loc == "Internal Storage") {
+            readFile()
+        } else {
+            checkAndRequestPermissionRead()
+        }
     }
 
     override fun exportExcel(name: String, type: String, loc: String) {
         excelName = name
         excelType = type
         storageOpt = loc
-        checkAndRequestPermissionWrite()
+        if (loc == "Internal Storage") {
+            writeFile()
+        } else {
+            checkAndRequestPermissionWrite()
+        }
     }
 
     private fun checkAndRequestPermissionRead() {
