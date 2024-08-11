@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
     // var for excel import-export
     private lateinit var excelType : String
     private lateinit var excelName : String
+    private lateinit var storageOpt : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -237,15 +238,17 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
         }
     }
 
-    override fun importExcel(name: String, type: String) {
+    override fun importExcel(name: String, type: String, loc: String) {
         excelName = name
         excelType = type
+        storageOpt = loc
         checkAndRequestPermissionRead()
     }
 
-    override fun exportExcel(name: String, type: String) {
+    override fun exportExcel(name: String, type: String, loc: String) {
         excelName = name
         excelType = type
+        storageOpt = loc
         checkAndRequestPermissionWrite()
     }
 
@@ -305,18 +308,24 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
     private fun readFile() {
         lifecycleScope.launch {
             noteDao?.deleteAllNotes()
-            val list = importXLFile(excelName, excelType)
+            val list = importXLFile(this@MainActivity, excelName, excelType, storageOpt)
+
+            if (list.isEmpty()) {
+                Toast.makeText(this@MainActivity, "File not found", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
             for (i in 0 until list.size) {
                 noteDao?.createNote(list[i])
             }
+            Toast.makeText(this@MainActivity, "Import successful", Toast.LENGTH_SHORT).show()
         }
-        Toast.makeText(this@MainActivity, "Import successful", Toast.LENGTH_SHORT).show()
     }
 
     private fun writeFile() {
         lifecycleScope.launch {
             val list = noteDao?.readAllNotes()?.first()
-            exportXLFile(excelName, excelType, list)
+            exportXLFile(this@MainActivity, excelName, excelType, storageOpt, list)
         }
         Toast.makeText(this@MainActivity, "Export successful", Toast.LENGTH_SHORT).show()
     }

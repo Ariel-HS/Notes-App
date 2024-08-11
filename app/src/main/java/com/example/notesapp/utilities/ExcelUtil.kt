@@ -1,5 +1,6 @@
 package com.example.notesapp.utilities
 
+import android.app.Activity
 import android.os.Environment
 import com.example.notesapp.data.Note
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
@@ -9,7 +10,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-fun exportXLFile(name: String, type: String, list : MutableList<Note>? = null) {
+fun exportXLFile(context: Activity, name: String, type: String, loc: String, list : MutableList<Note>? = null) {
     // should either be XLS or XLSX
     val workbook = if (type == "XLS") {
         HSSFWorkbook()
@@ -35,7 +36,12 @@ fun exportXLFile(name: String, type: String, list : MutableList<Note>? = null) {
         worksheet.setColumnWidth(j, (30*200))
     }
     try {
-        val dir = File(Environment.getExternalStorageDirectory(), "MyFiles")
+        // should either be Internal or External
+        val dir = if (loc == "Internal Storage") {
+            File(context.filesDir, "MyFiles")
+        } else {
+            File(Environment.getExternalStorageDirectory(), "MyFiles")
+        }
         if (!dir.exists()) {
             dir.mkdirs()
         }
@@ -46,7 +52,7 @@ fun exportXLFile(name: String, type: String, list : MutableList<Note>? = null) {
         } else {
             File(dir, "$name.xlsx")
         }
-//        println("CALLED HERE ${path.absolutePath}")
+        println("CALLED HERE ${path.absolutePath}")
 
         val outputStream = FileOutputStream(path)
         workbook.write(outputStream)
@@ -57,39 +63,50 @@ fun exportXLFile(name: String, type: String, list : MutableList<Note>? = null) {
     }
 }
 
-fun importXLFile(name: String, type: String) : MutableList<Note> {
-    // should either be XLS or XLSX
-    val file = if (type == "XLS") {
-        File(Environment.getExternalStorageDirectory(), "MyFiles/$name.xls")
-    } else {
-        File(Environment.getExternalStorageDirectory(), "MyFiles/$name.xlsx")
-    }
-    val inputStream = FileInputStream(file)
-
-    // should either be XLS or XLSX
-    val workbook = if (type == "XLS") {
-        HSSFWorkbook(inputStream)
-    } else {
-        XSSFWorkbook(inputStream)
-    }
-    val worksheet = workbook.getSheetAt(0)
+fun importXLFile(context: Activity, name: String, type: String, loc: String) : MutableList<Note> {
     val list = mutableListOf<Note>()
+    try {
+        // should either be Internal or External
+        val dir = if (loc == "Internal Storage") {
+            context.filesDir
+        } else {
+            Environment.getExternalStorageDirectory()
+        }
 
-    for (row in worksheet) {
-        val cellIterator: Iterator<Cell> = row.cellIterator()
+        // should either be XLS or XLSX
+        val file = if (type == "XLS") {
+            File(dir, "MyFiles/$name.xls")
+        } else {
+            File(dir, "MyFiles/$name.xlsx")
+        }
+        val inputStream = FileInputStream(file)
 
-        val title = cellIterator.next().stringCellValue
-        val note = cellIterator.next().stringCellValue
-        val category = cellIterator.next().stringCellValue
-        val created = cellIterator.next().stringCellValue
-        val updated = cellIterator.next().stringCellValue
-        println("Import note $title $note $category $created $updated")
+        // should either be XLS or XLSX
+        val workbook = if (type == "XLS") {
+            HSSFWorkbook(inputStream)
+        } else {
+            XSSFWorkbook(inputStream)
+        }
+        val worksheet = workbook.getSheetAt(0)
 
-        val newNote = Note(0, title, note, category, created, updated)
+        for (row in worksheet) {
+            val cellIterator: Iterator<Cell> = row.cellIterator()
 
-        list.add(newNote)
+            val title = cellIterator.next().stringCellValue
+            val note = cellIterator.next().stringCellValue
+            val category = cellIterator.next().stringCellValue
+            val created = cellIterator.next().stringCellValue
+            val updated = cellIterator.next().stringCellValue
+            println("Import note $title $note $category $created $updated")
+
+            val newNote = Note(0, title, note, category, created, updated)
+
+            list.add(newNote)
+        }
+    } catch (e: Exception) {
+        println(e.message)
+    } finally {
+        return list
     }
-
-    return list
 }
 

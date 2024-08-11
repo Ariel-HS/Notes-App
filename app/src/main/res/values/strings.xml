@@ -26,4 +26,8 @@
         <item>XLS</item>
         <item>XLSX</item>
     </string-array>
+    <string-array name="storageOptions">
+        <item>Internal Storage</item>
+        <item>External Storage</item>
+    </string-array>
 </resources>

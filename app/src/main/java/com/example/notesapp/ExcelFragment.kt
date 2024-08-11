@@ -14,6 +14,7 @@ import com.example.notesapp.databinding.FragmentExcelBinding
 class ExcelFragment(private val context: Context, private val listener: ExcelListener) : DialogFragment() {
     private lateinit var binding: FragmentExcelBinding
     private var excelOption = "XLSX"
+    private var fileOption = "Internal Storage"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,12 +28,21 @@ class ExcelFragment(private val context: Context, private val listener: ExcelLis
         }
 
         val excelOptions = resources.getStringArray(R.array.excelOptions)
-        val sortOptionsAdapter = ArrayAdapter(context, R.layout.dropdown, excelOptions)
+        val excelOptionsAdapter = ArrayAdapter(context, R.layout.dropdown, excelOptions)
         binding.excelType.setText(excelOption)
-        binding.excelType.setAdapter(sortOptionsAdapter)
+        binding.excelType.setAdapter(excelOptionsAdapter)
         binding.excelType.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
 
             excelOption = adapterView.getItemAtPosition(i).toString()
+        }
+
+        val storageOptions = resources.getStringArray(R.array.storageOptions)
+        val storageOptionsAdapter = ArrayAdapter(context, R.layout.dropdown, storageOptions)
+        binding.storageLoc.setText(fileOption)
+        binding.storageLoc.setAdapter(storageOptionsAdapter)
+        binding.storageLoc.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
+
+            fileOption = adapterView.getItemAtPosition(i).toString()
         }
 
         return binding.root
@@ -51,7 +61,7 @@ class ExcelFragment(private val context: Context, private val listener: ExcelLis
             if (fileName.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter a File Name!", Toast.LENGTH_SHORT).show()
             } else {
-                listener.importExcel(fileName, excelOption)
+                listener.importExcel(fileName, excelOption, fileOption)
             }
         }
 
@@ -61,7 +71,7 @@ class ExcelFragment(private val context: Context, private val listener: ExcelLis
             if (fileName.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter a File Name!", Toast.LENGTH_SHORT).show()
             } else {
-                listener.exportExcel(fileName, excelOption)
+                listener.exportExcel(fileName, excelOption, fileOption)
             }
         }
     }
@@ -71,7 +81,7 @@ class ExcelFragment(private val context: Context, private val listener: ExcelLis
     }
 
     interface ExcelListener {
-        fun importExcel(name: String, type: String)
-        fun exportExcel(name: String, type: String)
+        fun importExcel(name: String, type: String, loc: String)
+        fun exportExcel(name: String, type: String, loc: String)
     }
 }
