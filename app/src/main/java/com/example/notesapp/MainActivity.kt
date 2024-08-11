@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
     private var sortAlgorithm = "Quick Sort"
     private var matchAlgorithm = "KMP"
     private var filterCategory = ""
+    private var query = ""
 
     // var for excel import-export
     private lateinit var excelType : String
@@ -76,13 +77,26 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
 
     private fun populateNotesDisplay() {
         lifecycleScope.launch {
-            noteDao?.readAllNotes()?.collect { noteList ->
-                val sorted = utilSort(sortAlgorithm, sortOption, noteList)
-                if (filterCategory.isEmpty()) {
-                    adapter.submitList(sorted)
-                } else {
-                    val filtered = utilFilter(matchAlgorithm, filterCategory, sorted)
-                    adapter.submitList(filtered)
+            if (query.isEmpty()) {
+                noteDao?.readAllNotes()?.collect { noteList ->
+                    val sorted = utilSort(sortAlgorithm, sortOption, noteList)
+                    if (filterCategory.isEmpty()) {
+                        adapter.submitList(sorted)
+                    } else {
+                        val filtered = utilFilter(matchAlgorithm, filterCategory, sorted)
+                        adapter.submitList(filtered)
+                    }
+                }
+            } else {
+                noteDao?.readAllNotes()?.collect { noteList ->
+                    val matched = utilMatch(matchAlgorithm, searchOption, query, noteList)
+                    val sorted = utilSort(sortAlgorithm, sortOption, matched)
+                    if (filterCategory.isEmpty()) {
+                        adapter.submitList(sorted)
+                    } else {
+                        val filtered = utilFilter(matchAlgorithm, filterCategory, sorted)
+                        adapter.submitList(filtered)
+                    }
                 }
             }
         }
@@ -131,30 +145,8 @@ class MainActivity : AppCompatActivity(), SaveFragment.SaveNoteListener,
     }
 
     private fun onQueryChanged(query: String) {
-        lifecycleScope.launch {
-            if (query.isEmpty()) {
-                noteDao?.readAllNotes()?.collect { noteList ->
-                    val sorted = utilSort(sortAlgorithm, sortOption, noteList)
-                    if (filterCategory.isEmpty()) {
-                        adapter.submitList(sorted)
-                    } else {
-                        val filtered = utilFilter(matchAlgorithm, filterCategory, sorted)
-                        adapter.submitList(filtered)
-                    }
-                }
-            } else {
-                noteDao?.readAllNotes()?.collect { noteList ->
-                    val matched = utilMatch(matchAlgorithm, searchOption, query, noteList)
-                    val sorted = utilSort(sortAlgorithm, sortOption, matched)
-                    if (filterCategory.isEmpty()) {
-                        adapter.submitList(sorted)
-                    } else {
-                        val filtered = utilFilter(matchAlgorithm, filterCategory, sorted)
-                        adapter.submitList(filtered)
-                    }
-                }
-            }
-        }
+        this.query = query
+        populateNotesDisplay()
     }
 
     private fun showSettingsDialog() {
