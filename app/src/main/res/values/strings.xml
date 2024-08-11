@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">NotesApp</string>
-    
+
     <string-array name="sortOptions">
         <item>Title (A-Z)</item>
         <item>Title (Z-A)</item>
@@ -15,11 +15,15 @@
         <item>Note</item>
     </string-array>
     <string-array name="sortAlgorithmOptions">
-        <item>sort 1</item>
-        <item>sort 2</item>
+        <item>Quick Sort</item>
+        <item>Selection Sort</item>
     </string-array>
     <string-array name="matchAlgorithmOptions">
         <item>KMP</item>
         <item>BM</item>
+    </string-array>
+    <string-array name="excelOptions">
+        <item>XLS</item>
+        <item>XLSX</item>
     </string-array>
 </resources>

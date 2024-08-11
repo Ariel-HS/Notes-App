@@ -28,6 +28,7 @@
                 android:backgroundTint="#d60202"
                 android:contentDescription="Click to close"
                 android:foreground="@drawable/ic_close"
+                android:foregroundGravity="center"
                 android:padding="0dp"></Button>
         </RelativeLayout>
 
@@ -75,7 +76,7 @@
                 android:layout_weight="1"
                 android:inputType="none"
                 android:hint="Search-algorithm"
-                android:text="sort 1"
+                android:text="Quick Sort"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -95,64 +96,13 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/filterCategory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <Button
-                android:id="@+id/apply"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_margin="5dp"
-                android:backgroundTint="#0096FF"
-                android:contentDescription="Click to close"
-                android:text="APPLY"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="0dp"></Button>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_centerInParent="true"
-                >
-
-                <Button
-                    android:id="@+id/importXLS"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="5dp"
-                    android:backgroundTint="#008000"
-                    android:contentDescription="Click to close"
-                    android:text="import"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="0dp"></Button>
-
-                <Button
-                    android:id="@+id/exportXLS"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="5dp"
-                    android:backgroundTint="#008000"
-                    android:contentDescription="Click to close"
-                    android:text="export"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="0dp"></Button>
-            </LinearLayout>
-        </RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:hint="Filter Category"
+            android:minHeight="48dp"
+            ></EditText>
     </LinearLayout>
 </LinearLayout>
